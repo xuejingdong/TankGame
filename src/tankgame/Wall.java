@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package TankGame;
+package tankgame;
 
 /**
  *
@@ -20,7 +20,7 @@ public class Wall extends GameObject{
     private int disappearTime = 30;
     private int count;
     
-    Wall(Image img, int x, int y,int speed, boolean shootable){
+    Wall(Image img, int x, int y, int speed, boolean shootable){
         super(img,x,y,speed);
         this.beShoot = false;
         this.count = 0;
@@ -47,7 +47,7 @@ public class Wall extends GameObject{
     }
     
     public void draw(Graphics g, ImageObserver obs){
-        if(this.beShoot = false) 
+        if(this.beShoot == false) 
             g.drawImage(img, x, y, obs);
     
     }
