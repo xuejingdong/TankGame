@@ -20,17 +20,18 @@ import java.util.Observer;
 public class TankGame extends JApplet implements Runnable {
 
     Thread thread;
-    BufferedImage bimg;
+    BufferedImage bimg, leftImg,rightImg,miniMap;
     Graphics2D g2;
     int frameCount;
     Image background, wall1, wall2, tank;
     int w = 900, h = 720;
     Wall testW;
-    Tank testT;
-    GameEvents gameEvent;
-    KeyControl key;
+    Tank tank1,tank2;
+    GameEvents gameEvent1,gameEvent2;
+    KeyControl key1,key2;
     int[][] map;
-    ArrayList<Wall> wall_list;
+    static ArrayList<Wall> wall_list;
+    TankCollisionDetector CD;
 
     public void init() {
         setFocusable(true);
@@ -45,13 +46,17 @@ public class TankGame extends JApplet implements Runnable {
         }
 
         //testW = new Wall(wall1, 10, 10, 0, false);
-        testT = new Tank(tank, 1, 100, 100, 10, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
-        gameEvent = new GameEvents();
-        gameEvent.addObserver(testT);
-        key = new KeyControl(gameEvent);
-        //KeyControl key2 = new KeyControl(gameEvent2);
-        addKeyListener(key);
-        //addKeyListener(key2);
+        tank1 = new Tank(tank, 1, 70, 600, 10, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        tank2 = new Tank(tank,1,700,600,10,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+        gameEvent1 = new GameEvents();
+        gameEvent2 = new GameEvents();
+        gameEvent1.addObserver(tank1);
+        gameEvent2.addObserver(tank2);
+        key1 = new KeyControl(gameEvent1);
+        key2 = new KeyControl(gameEvent2);
+        addKeyListener(key1);
+        addKeyListener(key2);
+        CD = new TankCollisionDetector(gameEvent1, gameEvent2);
         wall_list = new ArrayList<Wall>();
         map = readMap("map.csv", 22, 28,wall_list);
         
@@ -132,11 +137,15 @@ public class TankGame extends JApplet implements Runnable {
     }
 
     public void drawDemo() {
-
+        //updating the gameObjects by first checking the collisions
+        CD.TankVSTank(tank1, tank2);
+        //CD.TankVSWall(tank1, tank2);
+        
+        //draw the gameObjects after updating
         drawBackGroundWithTileImage();
         drawMap();
-        //testW.draw(g2, this);
-        testT.draw(g2, this);
+        tank1.draw(g2, this);
+        tank2.draw(g2, this);
     }
 
     public void start() {

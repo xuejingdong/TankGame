@@ -26,7 +26,9 @@ public class Wall extends GameObject{
         this.count = 0;
         
     }
-    
+    public boolean isDisapeared(){
+        return (this.beShoot && this.shootable);//a wall is disappeared only when it is shootbale and gets shoot
+    }
     public boolean getBeShoot(){
         return this.beShoot;
     }
