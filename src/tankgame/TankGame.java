@@ -20,8 +20,9 @@ import java.util.Observer;
 public class TankGame extends JApplet implements Runnable {
 
     Thread thread;
-    BufferedImage bimg, leftImg,rightImg,miniMap;
-    Graphics2D g2;
+    BufferedImage bimg,miniBuf, leftImg,rightImg;
+    Image miniMap;
+    Graphics2D g2,gMini;
     int frameCount;
     Image background, wall1, wall2, tank;
     int w = 900, h = 720;
@@ -74,6 +75,9 @@ public class TankGame extends JApplet implements Runnable {
                 g2.drawImage(background, j * TileWidth,
                         i * TileHeight, TileWidth,
                         TileHeight, this);
+                gMini.drawImage(background, j * TileWidth,
+                        i * TileHeight, TileWidth,
+                        TileHeight, this);
             }
         }
 
@@ -82,6 +86,8 @@ public class TankGame extends JApplet implements Runnable {
     public void drawMap(){
         for(int i = 0; i < wall_list.size(); i++){
             wall_list.get(i).draw(g2, this);
+            wall_list.get(i).draw(gMini, this);
+            
         }
     }
     public int[][] readMap(String fileName, int height, int width, ArrayList<Wall> w) {
@@ -128,24 +134,33 @@ public class TankGame extends JApplet implements Runnable {
     public void paint(Graphics g) {
         if (bimg == null) {
             Dimension windowSize = getSize();
-            bimg = (BufferedImage) createImage(windowSize.width,
-                    windowSize.height);
+            bimg = (BufferedImage) createImage(w,h);
+            miniBuf = (BufferedImage) createImage(w,h);
             g2 = bimg.createGraphics();
+            gMini = miniBuf.createGraphics();
+            
+            leftImg = bimg.getSubimage(0, 0, 300, 480);
+            rightImg = bimg.getSubimage(400, 0, 300, 480);
+            miniMap = miniBuf.getScaledInstance(90, 72, Image.SCALE_SMOOTH);
         }
+        
         drawDemo();
-        g.drawImage(bimg, 0, 0, this);
+        g.drawImage(leftImg, 0, 0, this);
+        g.drawImage(rightImg,305,0,this);
+        g.drawImage(miniMap, 370,280,this);
     }
 
     public void drawDemo() {
         //updating the gameObjects by first checking the collisions
         CD.TankVSTank(tank1, tank2);
-        //CD.TankVSWall(tank1, tank2);
-        
+                
         //draw the gameObjects after updating
         drawBackGroundWithTileImage();
         drawMap();
         tank1.draw(g2, this);
+        tank1.draw(gMini, this);
         tank2.draw(g2, this);
+        tank2.draw(gMini, this);
     }
 
     public void start() {
@@ -177,7 +192,7 @@ public class TankGame extends JApplet implements Runnable {
         });
         f.getContentPane().add("Center", demo);
         f.pack();
-        f.setSize(new Dimension(900, 720));
+        f.setSize(new Dimension(640, 480));
         f.setVisible(true);
         f.setResizable(false);
         demo.start();

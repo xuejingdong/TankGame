@@ -29,6 +29,38 @@ public class TankCollisionDetector{
             System.out.println("tank1 and tank2 collision");
         }
     }
+    public void TankBulletVSWall(Tank tank1, Tank tank2){
+        Bullet bullet;
+        Wall wall;
+        ArrayList<Bullet> tank1Bullet = tank1.getBulletList();
+        ArrayList<Bullet> tank2Bullet = tank2.getBulletList();
+        for(int i  = 0; i < tank1Bullet.size(); i++){
+            bullet = tank1Bullet.get(i);
+            Rectangle bulletBox = new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
+            for(int j = 0; j < TankGame.wall_list.size(); j++){
+                wall = TankGame.wall_list.get(j);
+                Rectangle wallBox = new Rectangle(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight());
+                //check collision, 
+                if(bulletBox.intersects(wallBox)&&!tank1.getBoom()){
+                    tank1Bullet.remove(bullet);//remove bullet from list 
+                    wall.setBeShoot(true);
+                }
+            }
+        }
+        for(int i  = 0; i < tank2Bullet.size(); i++){
+            bullet = tank2Bullet.get(i);
+            Rectangle bulletBox = new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
+            for(int j = 0; j < TankGame.wall_list.size(); j++){
+                wall = TankGame.wall_list.get(j);
+                Rectangle wallBox = new Rectangle(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight());
+                //check collision, 
+                if(bulletBox.intersects(wallBox)&&!tank2.getBoom()){
+                    tank2Bullet.remove(bullet);//remove bullet from list 
+                    wall.setBeShoot(true);
+                }
+            }
+        }
+    }
     
     public void TankVSTankBullet(Tank tank1, Tank tank2){
         Bullet bullet;
