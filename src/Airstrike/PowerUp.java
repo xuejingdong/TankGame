@@ -17,8 +17,8 @@ public class PowerUp extends GameObject {
     int powerType;
 
     
-    PowerUp(Image img, Random gen, int y, int speed,int powerTpye){
-        super(img, Math.abs(gen.nextInt() % (600 - 30)),y,speed);
+    PowerUp(Image img, int x, int y, int speed,int powerTpye){
+        super(img, x, y, speed);
         this.powerType = powerType;
     }
     

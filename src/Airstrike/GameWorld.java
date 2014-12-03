@@ -61,36 +61,37 @@ public class GameWorld extends JApplet implements Runnable{
         setFocusable(true);
         setBackground(Color.white);
         try {
-       //sea=ImageIO.read(this.getClass().getClassLoader().getResource("water.png"));
-        sea = ImageIO.read(new File("Resources/water.png"));
-        island1 = ImageIO.read(new File("Resources/island1.png"));
-        island2 = ImageIO.read(new File("Resources/island2.png"));
-        island3 = ImageIO.read(new File("Resources/island3.png"));
-        myPlane = ImageIO.read(new File("Resources/myplane_1.png"));
-        blue_enemyImg = ImageIO.read(new File("Resources/enemy1_1.png"));
-        yellow_enemyImg = ImageIO.read(new File("Resources/enemy2_1.png"));
-        white_enemyImg = ImageIO.read(new File("Resources/enemy3_1.png"));
-        back_enemyImg = ImageIO.read(new File("Resources/enemy4_1.png"));
-        enemyBulletSmall = ImageIO.read(new File("Resources/enemybullet1.png"));
-        enemyBulletBig = ImageIO.read(new File("Resources/enemybullet2.png"));
+        //sea = ImageIO.read(new File("Resources/water.png"));
+        sea = ImageIO.read(GameWorld.class.getResource("Resources/water.png"));
+
+        island1 = ImageIO.read(GameWorld.class.getResource("Resources/island1.png"));
+        island2 = ImageIO.read(GameWorld.class.getResource("Resources/island2.png"));
+        island3 = ImageIO.read(GameWorld.class.getResource("Resources/island3.png"));
+        myPlane = ImageIO.read(GameWorld.class.getResource("Resources/myplane_1.png"));
+        blue_enemyImg = ImageIO.read(GameWorld.class.getResource("Resources/enemy1_1.png"));
+        yellow_enemyImg = ImageIO.read(GameWorld.class.getResource("Resources/enemy2_1.png"));
+        white_enemyImg = ImageIO.read(GameWorld.class.getResource("Resources/enemy3_1.png"));
+        back_enemyImg = ImageIO.read(GameWorld.class.getResource("Resources/enemy4_1.png"));
+        enemyBulletSmall = ImageIO.read(GameWorld.class.getResource("Resources/enemybullet1.png"));
+        enemyBulletBig = ImageIO.read(GameWorld.class.getResource("Resources/enemybullet2.png"));
        
-        boss_Enemy = ImageIO.read(new File("Resources/boss.png"));
-        power = ImageIO.read(new File("Resources/powerup.png"));
+        boss_Enemy = ImageIO.read(GameWorld.class.getResource("Resources/boss.png"));
+        power = ImageIO.read(GameWorld.class.getResource("Resources/powerup.png"));
         //get small explosion image array
-        smallExp[0] = ImageIO.read(new File("Resources/explosion1_1.png"));
-        smallExp[1] = ImageIO.read(new File("Resources/explosion1_2.png"));
-        smallExp[2] = ImageIO.read(new File("Resources/explosion1_3.png"));
-        smallExp[3] = ImageIO.read(new File("Resources/explosion1_4.png"));
-        smallExp[4] = ImageIO.read(new File("Resources/explosion1_5.png"));
-        smallExp[5] = ImageIO.read(new File("Resources/explosion1_6.png"));
+        smallExp[0] = ImageIO.read(GameWorld.class.getResource("Resources/explosion1_1.png"));
+        smallExp[1] = ImageIO.read(GameWorld.class.getResource("Resources/explosion1_2.png"));
+        smallExp[2] = ImageIO.read(GameWorld.class.getResource("Resources/explosion1_3.png"));
+        smallExp[3] = ImageIO.read(GameWorld.class.getResource("Resources/explosion1_4.png"));
+        smallExp[4] = ImageIO.read(GameWorld.class.getResource("Resources/explosion1_5.png"));
+        smallExp[5] = ImageIO.read(GameWorld.class.getResource("Resources/explosion1_6.png"));
         //get big explosion image array
-        bigExp[0] = ImageIO.read(new File("Resources/explosion2_1.png"));
-        bigExp[1] = ImageIO.read(new File("Resources/explosion2_2.png"));
-        bigExp[2] = ImageIO.read(new File("Resources/explosion2_3.png"));
-        bigExp[3] = ImageIO.read(new File("Resources/explosion2_4.png"));
-        bigExp[4] = ImageIO.read(new File("Resources/explosion2_5.png"));
-        bigExp[5] = ImageIO.read(new File("Resources/explosion2_6.png"));
-        bigExp[6] = ImageIO.read(new File("Resources/explosion2_7.png"));
+        bigExp[0] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_1.png"));
+        bigExp[1] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_2.png"));
+        bigExp[2] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_3.png"));
+        bigExp[3] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_4.png"));
+        bigExp[4] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_5.png"));
+        bigExp[5] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_6.png"));
+        bigExp[6] = ImageIO.read(GameWorld.class.getResource("Resources/explosion2_7.png"));
         
         I1 = new Island(island1, 100, 100, speed, generator);
         I2 = new Island(island2, 200, 400, speed, generator);
@@ -132,8 +133,9 @@ public class GameWorld extends JApplet implements Runnable{
     //function added to control what kind of enemy plane is showed
     public void timelineControl(){
         //create PowerUp
-        if(frameCount%350 == 0 && frameCount < 2000){
-            powerUp.add(new PowerUp(power,generator,-20,1,1));
+        if(frameCount%350 == 0 && frameCount < 4000){
+            int x = Math.abs(generator.nextInt() % (600 - 30));
+            powerUp.add(new PowerUp(power,x,-20,1,1));
         }
         //create 2 enemy planes that fly from the back
         if(frameCount%120 == 0 && frameCount < 2000){
@@ -223,7 +225,7 @@ public class GameWorld extends JApplet implements Runnable{
                 enemyl.get(i).update();
             }
             for(int i = 0; i < enemybl.size(); i++){
-                enemybl.get(i).update();
+                enemybl.get(i).update(w,h);
             }
             for(int i = 0; i < powerUp.size(); i++){
                 powerUp.get(i).update();
@@ -231,14 +233,14 @@ public class GameWorld extends JApplet implements Runnable{
             //update player1's bullet list
             for(int i = 0; i < player1.getPlane().getBulletList().size(); i++){
                 if((player1.getPlane().getBulletList().get(i)).getShow())
-                    player1.getPlane().getBulletList().get(i).update();
+                    player1.getPlane().getBulletList().get(i).update(w,h);
                 else
                     player1.getPlane().getBulletList().remove(i);
             }
             //update player2's bullet list
             for(int i = 0; i < player2.getPlane().getBulletList().size(); i++){
                 if((player2.getPlane().getBulletList().get(i)).getShow())
-                    player2.getPlane().getBulletList().get(i).update();
+                    player2.getPlane().getBulletList().get(i).update(w,h);
                 else
                     player2.getPlane().getBulletList().remove(i);
             }

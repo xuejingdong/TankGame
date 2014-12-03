@@ -28,7 +28,7 @@ public class SoundPlayer {
        this.soundFile = soundFile;
        this.type = type;
        try{
-           soundStream = AudioSystem.getAudioInputStream(new File(soundFile));
+           soundStream = AudioSystem.getAudioInputStream(SoundPlayer.class.getResource(soundFile));
            clip = AudioSystem.getClip();
            clip.open(soundStream);
        }

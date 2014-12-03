@@ -33,8 +33,8 @@ public class Bullet extends GameObject {
     public void setShow(boolean s){
         this.show = s;
     }
-    public void update(){
-        if(y < 430 && y > 0 && x > 0 && x < 600 && show){
+    public void update(int w, int h){
+        if(y < h-40 && y > 0 && x > 0 && x < w-40 && show){
             x = x + Xspeed;
             y = y + Yspeed;
         }

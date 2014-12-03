@@ -24,7 +24,6 @@ public class GameEvents extends Observable{
     Object event;
        
     public void setValue(KeyEvent e) {
-        
         type = keyE; // let's assume this means key input. 
         //Should use CONSTANT value for this when you program
         event = e;
