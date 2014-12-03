@@ -20,9 +20,9 @@ import java.util.Observer;
 public class TankGame extends JApplet implements Runnable {
 
     Thread thread;
-    BufferedImage bimg,miniBuf, leftImg,rightImg;
+    BufferedImage bimg,miniBuf, leftImg,rightImg,gDisplayBuf;
     Image miniMap;
-    Graphics2D g2,gMini;
+    Graphics2D g2,gMini,gDisplay;
     int frameCount;
     Image background, wall1, wall2, tank;
     int w = 1200, h = 1000;
@@ -75,9 +75,7 @@ public class TankGame extends JApplet implements Runnable {
                 g2.drawImage(background, j * TileWidth,
                         i * TileHeight, TileWidth,
                         TileHeight, this);
-                gMini.drawImage(background, j * TileWidth,
-                        i * TileHeight, TileWidth,
-                        TileHeight, this);
+                
             }
         }
 
@@ -86,7 +84,6 @@ public class TankGame extends JApplet implements Runnable {
     public void drawMap(){
         for(int i = 0; i < wall_list.size(); i++){
             wall_list.get(i).draw(g2, this);
-            wall_list.get(i).draw(gMini, this);
             
         }
     }
@@ -135,17 +132,15 @@ public class TankGame extends JApplet implements Runnable {
         if (bimg == null) {
             Dimension windowSize = getSize();
             bimg = (BufferedImage) createImage(w,h);
-            miniBuf = (BufferedImage) createImage(w,h);
+            gDisplayBuf = (BufferedImage) createImage(640,480);
             g2 = bimg.createGraphics();
-            gMini = miniBuf.createGraphics();
+            gDisplay = gDisplayBuf.createGraphics();
             
         }
         
         drawDemo();
-        g.drawImage(leftImg, 0, 0, this);
-        g.drawImage(rightImg,313,0,this);
-        g.drawImage(miniMap, 260,300,this);
-        System.out.println(" Drawing miniMap");
+        g.drawImage(gDisplayBuf, 0, 0, this);
+        
     }
 
     public void drawDemo() {
@@ -156,14 +151,18 @@ public class TankGame extends JApplet implements Runnable {
         drawBackGroundWithTileImage();
         drawMap();
         tank1.draw(g2, this);
-        tank1.draw(gMini, this);
         tank2.draw(g2, this);
-        tank2.draw(gMini, this);
-        System.out.println("Draw Tank");
         
-        leftImg = bimg.getSubimage(tank1.getX()-150, tank1.getY()-240, 311, 480);
-        //rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 311, 480);
-        miniMap = miniBuf.getScaledInstance(120, 100, Image.SCALE_SMOOTH);
+        //cut the iamge into left and right
+        leftImg = bimg.getSubimage(tank1.getX()-150, tank1.getY()-240, 312, 480);
+        rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 312, 480);
+        //get scaled image
+        miniMap = bimg.getScaledInstance(120, 100, Image.SCALE_SMOOTH);
+       //put all there map segment into one buffered iamge
+        gDisplay.drawImage(leftImg, 0, 0, this);
+        gDisplay.drawImage(rightImg,315,0,this);
+        gDisplay.drawImage(miniMap, 260,300,this);
+        
     }
 
     public void start() {
