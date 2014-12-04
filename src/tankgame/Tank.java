@@ -26,10 +26,10 @@ public class Tank extends GameObject implements Observer {
     private int up, down, left, right, fire;
     private int lifeCount;
     private boolean boom;
-    private Image bulletImg;
+    private Image bulletStrip,bulletImg;
     private ArrayList<Bullet> myBulletList;
-    //private Image [] healthBars, healthImg;
-    //private GameObject healthbar;
+    private Image [] healthBars, healthImg;
+    private GameObject healthbar;
     private String soundFileName;
     private SoundPlayer sp;
     private int currentSub;
@@ -49,11 +49,22 @@ public class Tank extends GameObject implements Observer {
         this.fire = fire;
         this.boom = false;
         this.myBulletList = new ArrayList<Bullet>();
-        //this.healthBars = new Image[4];
+        this.healthBars = new Image[4];
         this.currentSub = 0;
         this.score = 0;
         this.AllowMoveForward = true;
         this.AllowMoveBackward = true;
+        try{
+            this.bulletStrip = ImageIO.read(Tank.class.getResource("TankResources/Shell_basic_strip60.png"));
+            this.healthBars[0] = ImageIO.read(Tank.class.getResource("TankResources/health.png"));
+            this.healthBars[1] = ImageIO.read(Tank.class.getResource("TankResources/health1.png"));
+            this.healthBars[2] = ImageIO.read(Tank.class.getResource("TankResources/health2.png"));
+            this.healthBars[3] = ImageIO.read(Tank.class.getResource("TankResources/health3.png"));
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage()+ " Image not found in Tank class");
+        }
+        
     }
 
     public int getDamage() {
@@ -99,8 +110,7 @@ public class Tank extends GameObject implements Observer {
     }
 
     public void draw(Graphics g, ImageObserver obs) {
-        /*if(!boom){
-         g.drawImage(img, x, y, obs);
+        if(!boom){
          if(this.health >= 150){
          healthbar = new GameObject(healthBars[0],x,y+height,Yspeed);
          healthbar.draw(g, obs);
@@ -117,14 +127,22 @@ public class Tank extends GameObject implements Observer {
          healthbar = new GameObject(healthBars[3],x,y+height,Yspeed);
          healthbar.draw(g, obs);
          }
-         }*/
+         }
         g.drawImage(img, x, y, x + 64, y + 64, 64 * currentSub, 0, 64 * currentSub + 64, 64, obs);
-        //System.out.println("drawing tank!");
+        
     }
 
     private void fire() {
         Bullet playerb;
-        playerb = new Bullet(bulletImg, x + width / 3, y, bulletDamage, 0, -3);
+        if(this.currentSub < 30){
+            playerb = new Bullet(bulletImg, x + width / 3, y, bulletDamage, 
+                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * Yspeed + this.x), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * Yspeed + this.y));
+        }
+        else
+        {
+             playerb = new Bullet(bulletImg, x + width / 3, y, bulletDamage, 
+                    (int) (-Math.cos(Math.toRadians(currentSub * 6)) * Yspeed + this.x), (int) (Math.sin(Math.toRadians(currentSub * 6)) * Yspeed + this.y));
+        }        
         myBulletList.add(playerb);
     }
 

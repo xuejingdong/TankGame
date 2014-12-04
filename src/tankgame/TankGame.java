@@ -33,6 +33,7 @@ public class TankGame extends JApplet implements Runnable {
     int[][] map;
     static ArrayList<Wall> wall_list;
     TankCollisionDetector CD;
+    SoundPlayer sp;
 
     public void init() {
         setFocusable(true);
@@ -60,6 +61,7 @@ public class TankGame extends JApplet implements Runnable {
         CD = new TankCollisionDetector(gameEvent1, gameEvent2);
         wall_list = new ArrayList<Wall>(2000);
         map = readMap("map.csv", 30, 36,wall_list);
+        //sp = new SoundPlayer(1,"backgroundMusic.wav");
         
     }
 
