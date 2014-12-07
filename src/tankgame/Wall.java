@@ -22,6 +22,7 @@ public class Wall extends GameObject{
     
     Wall(Image img, int x, int y, int speed, boolean shootable){
         super(img,x,y,speed);
+        this.shootable = shootable;
         this.beShoot = false;
         this.count = 0;
         
@@ -32,7 +33,9 @@ public class Wall extends GameObject{
     public boolean getBeShoot(){
         return this.beShoot;
     }
-    
+    public boolean getShootable(){
+        return this.shootable;
+    }
     public void setBeShoot(boolean s){
         this.beShoot = s;
         this.count = 0;//set count as 0 if the wall has bean shoot
@@ -49,7 +52,7 @@ public class Wall extends GameObject{
     }
     
     public void draw(Graphics g, ImageObserver obs){
-        if(this.beShoot == false) 
+        if(this.isDisapeared() == false) 
             g.drawImage(img, x, y, obs);
     
     }

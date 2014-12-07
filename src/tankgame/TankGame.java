@@ -48,8 +48,8 @@ public class TankGame extends JApplet implements Runnable {
         }
 
         //testW = new Wall(wall1, 10, 10, 0, false);
-        tank1 = new Tank(tank, 1, 230, 608, 10, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
-        tank2 = new Tank(tank,1,864,608,10,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+        tank1 = new Tank(tank, 1, 230, 608, 6, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        tank2 = new Tank(tank,1,864,608,6,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
         gameEvent1 = new GameEvents();
         gameEvent2 = new GameEvents();
         gameEvent1.addObserver(tank1);
@@ -60,8 +60,8 @@ public class TankGame extends JApplet implements Runnable {
         addKeyListener(key2);
         CD = new TankCollisionDetector(gameEvent1, gameEvent2);
         wall_list = new ArrayList<Wall>(2000);
-        map = readMap("map.csv", 30, 36,wall_list);
-        //sp = new SoundPlayer(1,"backgroundMusic.wav");
+        map = readMap("map.csv", 34, 36,wall_list);
+        //sp = new SoundPlayer(1,"TankResources/Explosion_large.wav");
         
     }
 
@@ -148,21 +148,36 @@ public class TankGame extends JApplet implements Runnable {
     public void drawDemo() {
         //updating the gameObjects by first checking the collisions
         CD.TankVSTank(tank1, tank2);
+        CD.TankBulletVSWall(tank1, tank2);
+        for(int i = 0; i < tank1.getBulletList().size();i++){
+            if(tank1.getBulletList().get(i).getShow())
+                tank1.getBulletList().get(i).update(w,h);
+        }
+        for(int i = 0; i < tank2.getBulletList().size();i++){
+            if(tank2.getBulletList().get(i).getShow())
+                tank2.getBulletList().get(i).update(w,h);
+        }
                 
         //draw the gameObjects after updating
         drawBackGroundWithTileImage();
         drawMap();
         tank1.draw(g2, this);
         tank2.draw(g2, this);
-        
+        for(int i = 0; i < tank1.getBulletList().size(); i++){
+                tank1.getBulletList().get(i).draw(g2,this);
+        }
+        for(int i = 0; i < tank2.getBulletList().size(); i++){
+                tank2.getBulletList().get(i).draw(g2,this);
+        }
         //cut the iamge into left and right
-        leftImg = bimg.getSubimage(tank1.getX()-150, tank1.getY()-240, 312, 480);
-        rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 312, 480);
+        leftImg = bimg.getSubimage(tank1.getX()-150, tank1.getY()-240, 316, 480);
+        rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 316, 480);
         //get scaled image
-        miniMap = bimg.getScaledInstance(120, 100, Image.SCALE_SMOOTH);
-       //put all there map segment into one buffered iamge
+        BufferedImage temp = bimg.getSubimage(120, 250, 900, 710);
+        miniMap = temp.getScaledInstance(120, 100, Image.SCALE_SMOOTH);
+       //put all three map segments into one buffered iamge
         gDisplay.drawImage(leftImg, 0, 0, this);
-        gDisplay.drawImage(rightImg,315,0,this);
+        gDisplay.drawImage(rightImg,317,0,this);
         gDisplay.drawImage(miniMap, 260,300,this);
         
     }

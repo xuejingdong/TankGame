@@ -30,10 +30,10 @@ public class TankCollisionDetector{
         }
     }
     public void TankBulletVSWall(Tank tank1, Tank tank2){
-        Bullet bullet;
+        TankBullet bullet;
         Wall wall;
-        ArrayList<Bullet> tank1Bullet = tank1.getBulletList();
-        ArrayList<Bullet> tank2Bullet = tank2.getBulletList();
+        ArrayList<TankBullet> tank1Bullet = tank1.getBulletList();
+        ArrayList<TankBullet> tank2Bullet = tank2.getBulletList();
         for(int i  = 0; i < tank1Bullet.size(); i++){
             bullet = tank1Bullet.get(i);
             Rectangle bulletBox = new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
@@ -44,6 +44,7 @@ public class TankCollisionDetector{
                 if(bulletBox.intersects(wallBox)&&!tank1.getBoom()){
                     tank1Bullet.remove(bullet);//remove bullet from list 
                     wall.setBeShoot(true);
+                    System.out.println("tank1 bullet & wall collision hanppens");
                 }
             }
         }
@@ -66,8 +67,8 @@ public class TankCollisionDetector{
         Bullet bullet;
         Rectangle tank1Box = new Rectangle(tank1.getX(), tank1.getY(), tank1.getWidth(), tank1.getHeight());
         Rectangle tank2Box = new Rectangle(tank2.getX(), tank2.getY(), tank2.getWidth(), tank2.getHeight());
-        ArrayList<Bullet> tank1Bullet = tank1.getBulletList();
-        ArrayList<Bullet> tank2Bullet = tank2.getBulletList();
+        ArrayList<TankBullet> tank1Bullet = tank1.getBulletList();
+        ArrayList<TankBullet> tank2Bullet = tank2.getBulletList();
         
         for(int i = 0; i < tank2Bullet.size(); i++){//check collision between tank1 with the bullets of tank2
             bullet = tank2Bullet.get(i);

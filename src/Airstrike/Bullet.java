@@ -22,6 +22,7 @@ public class Bullet extends GameObject {
         this.damage = damage;
         this.Xspeed = Xspeed;
         this.show = true;
+        this.width = 32;
     }
          
     public int getDamge(){

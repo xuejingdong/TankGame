@@ -8,6 +8,8 @@ package Airstrike;
  *
  * @author Dong
  */
+import tankgame.*;
+import Airstrike.*;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +35,7 @@ public class SoundPlayer {
            clip.open(soundStream);
        }
        catch(Exception e){
-           System.out.println(e.getMessage() + "No sound documents are fouond");
+           System.out.println(e.getMessage() + " No sound documents are fouond in sound player");
        }
        if(this.type == 1){
            Runnable myRunnable = new Runnable(){

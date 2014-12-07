@@ -26,15 +26,14 @@ public class Tank extends GameObject implements Observer {
     private int up, down, left, right, fire;
     private int lifeCount;
     private boolean boom;
-    private Image bulletStrip,bulletImg;
-    private ArrayList<Bullet> myBulletList;
+    private Image bulletStrip,bullet1Img;
+    private ArrayList<TankBullet> myBulletList;
     private Image [] healthBars, healthImg;
     private GameObject healthbar;
     private String soundFileName;
     private SoundPlayer sp;
     private int currentSub;
     private int score;
-    private boolean AllowMoveForward, AllowMoveBackward, isMoveingForward, isMoveingBackward;
 
     Tank(Image img, int life, int x, int y, int Yspeed, int up, int down, int left, int right, int fire) {
         super(img, x, y, Yspeed);
@@ -48,12 +47,11 @@ public class Tank extends GameObject implements Observer {
         this.right = right;
         this.fire = fire;
         this.boom = false;
-        this.myBulletList = new ArrayList<Bullet>();
+        this.myBulletList = new ArrayList<TankBullet>();
         this.healthBars = new Image[4];
         this.currentSub = 0;
         this.score = 0;
-        this.AllowMoveForward = true;
-        this.AllowMoveBackward = true;
+        
         try{
             this.bulletStrip = ImageIO.read(Tank.class.getResource("TankResources/Shell_basic_strip60.png"));
             this.healthBars[0] = ImageIO.read(Tank.class.getResource("TankResources/health.png"));
@@ -71,7 +69,7 @@ public class Tank extends GameObject implements Observer {
         return this.damage;
     }
 
-    public ArrayList<Bullet> getBulletList() {
+    public ArrayList<TankBullet> getBulletList() {
         return this.myBulletList;
     }
 
@@ -133,16 +131,17 @@ public class Tank extends GameObject implements Observer {
     }
 
     private void fire() {
-        Bullet playerb;
+        TankBullet playerb;
         if(this.currentSub < 30){
-            playerb = new Bullet(bulletImg, x + width / 3, y, bulletDamage, 
-                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * Yspeed + this.x), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * Yspeed + this.y));
+            playerb = new TankBullet(bulletStrip, x + width / 3, y-5, bulletDamage, 
+                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
         }
         else
         {
-             playerb = new Bullet(bulletImg, x + width / 3, y, bulletDamage, 
-                    (int) (-Math.cos(Math.toRadians(currentSub * 6)) * Yspeed + this.x), (int) (Math.sin(Math.toRadians(currentSub * 6)) * Yspeed + this.y));
-        }        
+             playerb = new TankBullet(bulletStrip, x + width / 3, y+40, bulletDamage, 
+                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
+        } 
+        
         myBulletList.add(playerb);
     }
 
@@ -159,6 +158,7 @@ public class Tank extends GameObject implements Observer {
                 currentSub = (currentSub - 1 + 60) % 60;
             } else if (keyCode == fire) {
                 fire();
+                System.out.println("Firing");
             } else {
 
                 if (keyCode == up) {
