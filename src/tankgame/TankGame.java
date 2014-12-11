@@ -24,14 +24,16 @@ public class TankGame extends JApplet implements Runnable {
     Image miniMap;
     Graphics2D g2,gMini,gDisplay;
     int frameCount;
-    Image background, wall1, wall2, tank;
-    int w = 1200, h = 1000;
+    Image background, wall1, wall2, tankRed, tankBlue;
+    static Image bigExp,smallExp;
+    int w = 1200, h = 1200;
     Wall testW;
     Tank tank1,tank2;
     GameEvents gameEvent1,gameEvent2;
     KeyControl key1,key2;
     int[][] map;
     static ArrayList<Wall> wall_list;
+    static ArrayList<TankGameExplosion> explosion;
     TankCollisionDetector CD;
     SoundPlayer sp;
 
@@ -41,15 +43,18 @@ public class TankGame extends JApplet implements Runnable {
             background = ImageIO.read(TankGame.class.getResource("TankResources/background.png"));
             wall1 = ImageIO.read(TankGame.class.getResource("TankResources/wall1.png"));
             wall2 = ImageIO.read(TankGame.class.getResource("TankResources/wall2.png"));
-            tank = ImageIO.read(TankGame.class.getResource("TankResources/Tank1_strip60.png"));
+            tankBlue = ImageIO.read(TankGame.class.getResource("TankResources/Tank1_strip60.png"));
+            tankRed = ImageIO.read(TankGame.class.getResource("TankResources/Tank2_strip60.png"));
+            bigExp = ImageIO.read(TankGame.class.getResource("TankResources/Explosion_large_strip7.png"));
+            smallExp = ImageIO.read(TankGame.class.getResource("TankResources/Explosion_small_strip6.png"));
             //System.out.println(wall1.getWidth(this) + " " + wall1.getHeight(this));
         } catch (Exception e) {
             System.out.println("No resource are found in init()");
         }
 
         //testW = new Wall(wall1, 10, 10, 0, false);
-        tank1 = new Tank(tank, 1, 230, 608, 6, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
-        tank2 = new Tank(tank,1,864,608,6,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+        tank1 = new Tank(tankBlue, 1, 230, 608, 6, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        tank2 = new Tank(tankRed,1,864,608,6,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
         gameEvent1 = new GameEvents();
         gameEvent2 = new GameEvents();
         gameEvent1.addObserver(tank1);
@@ -60,7 +65,8 @@ public class TankGame extends JApplet implements Runnable {
         addKeyListener(key2);
         CD = new TankCollisionDetector(gameEvent1, gameEvent2);
         wall_list = new ArrayList<Wall>(2000);
-        map = readMap("map.csv", 34, 36,wall_list);
+        explosion = new ArrayList<TankGameExplosion>(200);
+        map = readMap("map.csv", 37, 38,wall_list);
         //sp = new SoundPlayer(1,"TankResources/Explosion_large.wav");
         
     }
@@ -86,7 +92,12 @@ public class TankGame extends JApplet implements Runnable {
     public void drawMap(){
         for(int i = 0; i < wall_list.size(); i++){
             wall_list.get(i).draw(g2, this);
-            
+        }
+    }
+    
+    public void updateMap(){
+        for(int i = 0; i < wall_list.size(); i++){
+            wall_list.get(i).update();
         }
     }
     public int[][] readMap(String fileName, int height, int width, ArrayList<Wall> w) {
@@ -149,6 +160,7 @@ public class TankGame extends JApplet implements Runnable {
         //updating the gameObjects by first checking the collisions
         CD.TankVSTank(tank1, tank2);
         CD.TankBulletVSWall(tank1, tank2);
+        updateMap();
         for(int i = 0; i < tank1.getBulletList().size();i++){
             if(tank1.getBulletList().get(i).getShow())
                 tank1.getBulletList().get(i).update(w,h);
@@ -157,6 +169,15 @@ public class TankGame extends JApplet implements Runnable {
             if(tank2.getBulletList().get(i).getShow())
                 tank2.getBulletList().get(i).update(w,h);
         }
+         for(int i = 0; i< explosion.size(); i++){
+                if(explosion.get(i).getFinished()) {
+                    explosion.remove(i);
+                    i --;
+                }
+                else{
+                    explosion.get(i).update();
+                }
+            }
                 
         //draw the gameObjects after updating
         drawBackGroundWithTileImage();
@@ -169,9 +190,13 @@ public class TankGame extends JApplet implements Runnable {
         for(int i = 0; i < tank2.getBulletList().size(); i++){
                 tank2.getBulletList().get(i).draw(g2,this);
         }
+        for(int i = 0; i < explosion.size(); i++){
+                explosion.get(i).draw(g2, this);
+            }
         //cut the iamge into left and right
         leftImg = bimg.getSubimage(tank1.getX()-150, tank1.getY()-240, 316, 480);
         rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 316, 480);
+        
         //get scaled image
         BufferedImage temp = bimg.getSubimage(120, 250, 900, 710);
         miniMap = temp.getScaledInstance(120, 100, Image.SCALE_SMOOTH);

@@ -26,7 +26,7 @@ public class Tank extends GameObject implements Observer {
     private int up, down, left, right, fire;
     private int lifeCount;
     private boolean boom;
-    private Image bulletStrip,bullet1Img;
+    private Image basicBulletStrip,bullet1Img,currentBulletStrip;
     private ArrayList<TankBullet> myBulletList;
     private Image [] healthBars, healthImg;
     private GameObject healthbar;
@@ -53,7 +53,7 @@ public class Tank extends GameObject implements Observer {
         this.score = 0;
         
         try{
-            this.bulletStrip = ImageIO.read(Tank.class.getResource("TankResources/Shell_basic_strip60.png"));
+            this.basicBulletStrip = ImageIO.read(Tank.class.getResource("TankResources/Shell_basic_strip60.png"));
             this.healthBars[0] = ImageIO.read(Tank.class.getResource("TankResources/health.png"));
             this.healthBars[1] = ImageIO.read(Tank.class.getResource("TankResources/health1.png"));
             this.healthBars[2] = ImageIO.read(Tank.class.getResource("TankResources/health2.png"));
@@ -90,20 +90,11 @@ public class Tank extends GameObject implements Observer {
     }
 
     public void isDied() {
-        //GameWorld.explosions.add(new Explosion(x,y,GameWorld.bigExp));
-        System.out.println("player plane explodes");
+        TankGame.explosion.add(new TankGameExplosion(x,y,7,TankGame.bigExp));
 
         //sp.play();
-        if (this.lifeCount > 1) {
-            lifeCount--;
-            this.health = 200;
-            this.x = 200;
-            this.y = 360;
-        } else {
-            this.x = 480;
-            this.y = 500;
-            boom = true;
-        }
+        boom = true;
+        
 
     }
 
@@ -133,12 +124,12 @@ public class Tank extends GameObject implements Observer {
     private void fire() {
         TankBullet playerb;
         if(this.currentSub < 30){
-            playerb = new TankBullet(bulletStrip, x + width / 3, y-5, bulletDamage, 
+            playerb = new TankBullet(basicBulletStrip, x + width / 3, y-5, bulletDamage, 
                     (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
         }
         else
         {
-             playerb = new TankBullet(bulletStrip, x + width / 3, y+40, bulletDamage, 
+             playerb = new TankBullet(basicBulletStrip, x + width / 3, y+40, bulletDamage, 
                     (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
         } 
         
@@ -158,7 +149,7 @@ public class Tank extends GameObject implements Observer {
                 currentSub = (currentSub - 1 + 60) % 60;
             } else if (keyCode == fire) {
                 fire();
-                System.out.println("Firing");
+                //System.out.println("Firing");
             } else {
 
                 if (keyCode == up) {
@@ -175,7 +166,7 @@ public class Tank extends GameObject implements Observer {
                 for (int i = 0; i < TankGame.wall_list.size(); i++) {
                     wall = TankGame.wall_list.get(i);//get wall in the array
                     Rectangle wallBox = new Rectangle(wall.getX(), wall.getY(), wall.getWidth(), wall.getHeight());//compute the rectagle of the wall
-                    if (tankBox.intersects(wallBox)) {//check collision between one tank and one wall
+                    if (tankBox.intersects(wallBox)&& !wall.isDisapeared()) {//check collision between one tank and one wall
                         isCls = true;
                     }
                 }

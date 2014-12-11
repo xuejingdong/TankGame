@@ -17,14 +17,16 @@ import java.util.Random;
 public class Wall extends GameObject{
     private boolean shootable;
     private boolean beShoot;
-    private int disappearTime = 30;
+    private int disappearTime = 150;
     private int count;
+    private int health;
     
     Wall(Image img, int x, int y, int speed, boolean shootable){
         super(img,x,y,speed);
         this.shootable = shootable;
         this.beShoot = false;
         this.count = 0;
+        this.health = 10;
         
     }
     public boolean isDisapeared(){
@@ -37,8 +39,13 @@ public class Wall extends GameObject{
         return this.shootable;
     }
     public void setBeShoot(boolean s){
+        TankGame.explosion.add(new TankGameExplosion(x,y,6,TankGame.smallExp));
+        //sp.play();
         this.beShoot = s;
         this.count = 0;//set count as 0 if the wall has bean shoot
+    }
+    public void reduceHealth(int h){
+        health -= h;
     }
     
     public void update(){

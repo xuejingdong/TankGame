@@ -41,10 +41,11 @@ public class TankCollisionDetector{
                 wall = TankGame.wall_list.get(j);
                 Rectangle wallBox = new Rectangle(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight());
                 //check collision, 
-                if(bulletBox.intersects(wallBox)&&!tank1.getBoom()){
+                if(bulletBox.intersects(wallBox)&&!tank1.getBoom()&& !wall.isDisapeared()){
                     tank1Bullet.remove(bullet);//remove bullet from list 
-                    wall.setBeShoot(true);
-                    System.out.println("tank1 bullet & wall collision hanppens");
+                    if(wall.getShootable())
+                        wall.setBeShoot(true);
+                    //System.out.println("tank1 bullet & wall collision hanppens");
                 }
             }
         }
@@ -55,9 +56,10 @@ public class TankCollisionDetector{
                 wall = TankGame.wall_list.get(j);
                 Rectangle wallBox = new Rectangle(wall.getX(),wall.getY(),wall.getWidth(),wall.getHeight());
                 //check collision, 
-                if(bulletBox.intersects(wallBox)&&!tank2.getBoom()){
+                if(bulletBox.intersects(wallBox)&&!tank2.getBoom() && !wall.isDisapeared()){
                     tank2Bullet.remove(bullet);//remove bullet from list 
-                    wall.setBeShoot(true);
+                    if(wall.getShootable())
+                        wall.setBeShoot(true);
                 }
             }
         }
