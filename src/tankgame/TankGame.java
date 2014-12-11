@@ -66,7 +66,7 @@ public class TankGame extends JApplet implements Runnable {
         wall_list = new ArrayList<Wall>(2000);
         explosion = new ArrayList<TankGameExplosion>(200);
         map = readMap("map.csv", 37, 38,wall_list);
-        //sp = new SoundPlayer(1,"TankResources/Explosion_large.wav");
+        sp = new SoundPlayer(1,"TankResources/background.wav");
         
     }
 

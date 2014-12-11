@@ -20,6 +20,8 @@ public class Wall extends GameObject{
     private int disappearTime = 150;
     private int count;
     private int health;
+    private String soundFileName;
+    private SoundPlayer sp;
     
     Wall(Image img, int x, int y, int speed, boolean shootable){
         super(img,x,y,speed);
@@ -39,8 +41,10 @@ public class Wall extends GameObject{
         return this.shootable;
     }
     public void setBeShoot(boolean s){
+        this.soundFileName = "TankResources/Explosion_small.wav";
+        this.sp = new SoundPlayer(2,soundFileName);
         TankGame.explosion.add(new TankGameExplosion(x,y,6,TankGame.smallExp));
-        //sp.play();
+        sp.play();
         this.beShoot = s;
         this.count = 0;//set count as 0 if the wall has bean shoot
     }

@@ -52,6 +52,7 @@ public class Tank extends GameObject implements Observer {
         this.currentSub = 0;
         this.score = 0;
         
+        
         try{
             this.basicBulletStrip = ImageIO.read(Tank.class.getResource("TankResources/Shell_basic_strip60.png"));
             this.healthBars[0] = ImageIO.read(Tank.class.getResource("TankResources/health.png"));
@@ -90,9 +91,10 @@ public class Tank extends GameObject implements Observer {
     }
 
     public void isDied() {
+        this.soundFileName = "TankResources/Explosion_large.wav";
+        this.sp = new SoundPlayer(2,soundFileName);
         TankGame.explosion.add(new TankGameExplosion(x,y,7,TankGame.bigExp));
-
-        //sp.play();
+        sp.play();
         boom = true;
         
     }
@@ -176,6 +178,12 @@ public class Tank extends GameObject implements Observer {
                     this.x = futureX;
                     this.y = futureY;
                 }
+                else{
+                    this.soundFileName = "TankResources/turret.wav";
+                    this.sp = new SoundPlayer(2,soundFileName);
+                    sp.play();
+                }
+                
             }
             
         } else if (ge.getType() == 2) {
