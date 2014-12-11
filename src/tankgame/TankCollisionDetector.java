@@ -26,7 +26,7 @@ public class TankCollisionDetector{
         if(tank1Box.intersects(tank2Box)){
             this.gameEvent1.setValue("Tank Collision");
             this.gameEvent2.setValue("Tank Collision");
-            System.out.println("tank1 and tank2 collision");
+            //System.out.println("tank1 and tank2 collision");
         }
     }
     public void TankBulletVSWall(Tank tank1, Tank tank2){
@@ -76,8 +76,9 @@ public class TankCollisionDetector{
             bullet = tank2Bullet.get(i);
             Rectangle bullet2Box= new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
             if(tank1Box.intersects(bullet2Box) && !tank1.getBoom()){
+                System.out.println("tank1 and tank2 bullet Collision");
                 this.gameEvent1.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
-                tank2Bullet.remove(i);//remove this bullet from the list
+                tank2Bullet.remove(bullet);//remove this bullet from the list
             }
         }
         
@@ -85,8 +86,9 @@ public class TankCollisionDetector{
             bullet = tank1Bullet.get(i);
             Rectangle bullet1Box= new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
             if(tank2Box.intersects(bullet1Box) && !tank2.getBoom()){
+                System.out.println("tank2 and tank1 bullet Collision");
                 this.gameEvent2.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
-                tank1Bullet.remove(i);//remove this bullet from the list
+                tank1Bullet.remove(bullet);//remove this bullet from the list
             }
         }
     }

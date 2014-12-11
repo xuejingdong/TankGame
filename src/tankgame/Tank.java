@@ -40,7 +40,7 @@ public class Tank extends GameObject implements Observer {
         this.width = 64;
         health = 200;
         this.damage = damage;
-        this.bulletDamage = 4;
+        this.bulletDamage = 50;
         this.up = up;
         this.down = down;
         this.left = left;
@@ -95,45 +95,46 @@ public class Tank extends GameObject implements Observer {
         //sp.play();
         boom = true;
         
-
     }
 
     public void draw(Graphics g, ImageObserver obs) {
         if(!boom){
-         if(this.health >= 150){
-         healthbar = new GameObject(healthBars[0],x,y+height,Yspeed);
-         healthbar.draw(g, obs);
+            g.drawImage(img, x, y, x + 64, y + 64, 64 * currentSub, 0, 64 * currentSub + 64, 64, obs);
+            if(this.health >= 150){
+                healthbar = new GameObject(healthBars[0],x,y+height,Yspeed);
+                healthbar.draw(g, obs);
+            }
+            if(this.health < 150 && this.health >=100){
+                healthbar = new GameObject(healthBars[1],x,y+height,Yspeed);
+                healthbar.draw(g, obs);
+            }
+            if(this.health < 100 && this.health >=50){
+                healthbar = new GameObject(healthBars[2],x,y+height,Yspeed);
+                healthbar.draw(g, obs);
+            }
+            if(health < 50){
+                healthbar = new GameObject(healthBars[3],x,y+height,Yspeed);
+                healthbar.draw(g, obs);
+            }
          }
-         if(this.health < 150 && this.health >=100){
-         healthbar = new GameObject(healthBars[1],x,y+height,Yspeed);
-         healthbar.draw(g, obs);
-         }
-         if(this.health < 100 && this.health >=50){
-         healthbar = new GameObject(healthBars[2],x,y+height,Yspeed);
-         healthbar.draw(g, obs);
-         }
-         if(health < 50){
-         healthbar = new GameObject(healthBars[3],x,y+height,Yspeed);
-         healthbar.draw(g, obs);
-         }
-         }
-        g.drawImage(img, x, y, x + 64, y + 64, 64 * currentSub, 0, 64 * currentSub + 64, 64, obs);
+        
         
     }
 
     private void fire() {
-        TankBullet playerb;
-        if(this.currentSub < 30){
-            playerb = new TankBullet(basicBulletStrip, x + width / 3, y-5, bulletDamage, 
+        if(!this.boom){
+            TankBullet playerb;
+            if(this.currentSub < 30){
+                playerb = new TankBullet(basicBulletStrip, x + width / 3, y-5, bulletDamage, 
                     (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
+            }
+            else
+            {
+                playerb = new TankBullet(basicBulletStrip, x + width / 3, y+40, bulletDamage, 
+                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
+            } 
+             myBulletList.add(playerb);
         }
-        else
-        {
-             playerb = new TankBullet(basicBulletStrip, x + width / 3, y+40, bulletDamage, 
-                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
-        } 
-        
-        myBulletList.add(playerb);
     }
 
     public void update(Observable obj, Object arg) {

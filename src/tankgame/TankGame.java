@@ -52,7 +52,6 @@ public class TankGame extends JApplet implements Runnable {
             System.out.println("No resource are found in init()");
         }
 
-        //testW = new Wall(wall1, 10, 10, 0, false);
         tank1 = new Tank(tankBlue, 1, 230, 608, 6, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
         tank2 = new Tank(tankRed,1,864,608,6,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
         gameEvent1 = new GameEvents();
@@ -160,6 +159,7 @@ public class TankGame extends JApplet implements Runnable {
         //updating the gameObjects by first checking the collisions
         CD.TankVSTank(tank1, tank2);
         CD.TankBulletVSWall(tank1, tank2);
+        CD.TankVSTankBullet(tank1, tank2);
         updateMap();
         for(int i = 0; i < tank1.getBulletList().size();i++){
             if(tank1.getBulletList().get(i).getShow())
@@ -198,7 +198,7 @@ public class TankGame extends JApplet implements Runnable {
         rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 316, 480);
         
         //get scaled image
-        BufferedImage temp = bimg.getSubimage(120, 250, 900, 710);
+        BufferedImage temp = bimg.getSubimage(150, 250, 900, 710);
         miniMap = temp.getScaledInstance(120, 100, Image.SCALE_SMOOTH);
        //put all three map segments into one buffered iamge
         gDisplay.drawImage(leftImg, 0, 0, this);
