@@ -24,7 +24,7 @@ public class TankGame extends JApplet implements Runnable {
     Image miniMap;
     Graphics2D g2,gMini,gDisplay;
     int frameCount;
-    Image background, wall1, wall2, tankRed, tankBlue;
+    Image background, wall1, wall2, tankRed, tankBlue,powerUp;
     static Image bigExp,smallExp;
     int w = 1200, h = 1200;
     Wall testW;
@@ -34,6 +34,7 @@ public class TankGame extends JApplet implements Runnable {
     int[][] map;
     static ArrayList<Wall> wall_list;
     static ArrayList<TankGameExplosion> explosion;
+    static ArrayList<TankGamePowerUp> powerup;
     TankCollisionDetector CD;
     SoundPlayer sp;
 
@@ -47,6 +48,7 @@ public class TankGame extends JApplet implements Runnable {
             tankRed = ImageIO.read(TankGame.class.getResource("TankResources/Tank2_strip60.png"));
             bigExp = ImageIO.read(TankGame.class.getResource("TankResources/Explosion_large_strip7.png"));
             smallExp = ImageIO.read(TankGame.class.getResource("TankResources/Explosion_small_strip6.png"));
+            powerUp = ImageIO.read(TankGame.class.getResource("TankResources/Weapon_strip4.png"));
             //System.out.println(wall1.getWidth(this) + " " + wall1.getHeight(this));
         } catch (Exception e) {
             System.out.println("No resource are found in init()");
@@ -65,8 +67,9 @@ public class TankGame extends JApplet implements Runnable {
         CD = new TankCollisionDetector(gameEvent1, gameEvent2);
         wall_list = new ArrayList<Wall>(2000);
         explosion = new ArrayList<TankGameExplosion>(200);
-        map = readMap("map.csv", 37, 38,wall_list);
-        sp = new SoundPlayer(1,"TankResources/background.wav");
+        powerup = new ArrayList<TankGamePowerUp>(10);
+        map = readMap("map.csv", 37, 38,wall_list,powerup);
+        //sp = new SoundPlayer(1,"TankResources/background.wav");
         
     }
 
@@ -92,14 +95,20 @@ public class TankGame extends JApplet implements Runnable {
         for(int i = 0; i < wall_list.size(); i++){
             wall_list.get(i).draw(g2, this);
         }
+        for(int i = 0; i < powerup.size(); i++){
+            powerup.get(i).draw(g2, this);
+        }
     }
     
     public void updateMap(){
         for(int i = 0; i < wall_list.size(); i++){
             wall_list.get(i).update();
         }
+        for(int i = 0; i < powerup.size(); i++){
+            powerup.get(i).update();
+        }
     }
-    public int[][] readMap(String fileName, int height, int width, ArrayList<Wall> w) {
+    public int[][] readMap(String fileName, int height, int width, ArrayList<Wall> w,ArrayList<TankGamePowerUp> p) {
 
         Scanner fileScanner;
         int map[][] = new int[height][width];
@@ -123,6 +132,18 @@ public class TankGame extends JApplet implements Runnable {
                     }
                     if(map[i][j] == 2){
                         w.add(new Wall(wall2,32*j,32*i,0,true));
+                        //System.out.println(32*j + " "+ 32*i);
+                    }
+                    if(map[i][j] == 3){
+                        p.add(new TankGamePowerUp(powerUp,32*j,32*i,0,1));
+                        //System.out.println(32*j + " "+ 32*i);
+                    }
+                    if(map[i][j] == 4){
+                        p.add(new TankGamePowerUp(powerUp,32*j,32*i,0,2));
+                        //System.out.println(32*j + " "+ 32*i);
+                    }
+                    if(map[i][j] == 5){
+                        p.add(new TankGamePowerUp(powerUp,32*j,32*i,0,3));
                         //System.out.println(32*j + " "+ 32*i);
                     }
                 }
@@ -156,10 +177,16 @@ public class TankGame extends JApplet implements Runnable {
     }
 
     public void drawDemo() {
+        String content = ""+tank1.getScore();
+        String content1 = ""+tank2.getScore();
+        Font stringFont = new Font( "SansSerif", Font.PLAIN, 18 ); 
+        g2.setFont(stringFont); 
+        g2.setColor(Color.white);
         //updating the gameObjects by first checking the collisions
-        CD.TankVSTank(tank1, tank2);
+        //CD.TankVSTank(tank1, tank2);
         CD.TankBulletVSWall(tank1, tank2);
         CD.TankVSTankBullet(tank1, tank2);
+        CD.TankVSPowerUp(tank1, tank2);
         updateMap();
         for(int i = 0; i < tank1.getBulletList().size();i++){
             if(tank1.getBulletList().get(i).getShow())
@@ -192,7 +219,9 @@ public class TankGame extends JApplet implements Runnable {
         }
         for(int i = 0; i < explosion.size(); i++){
                 explosion.get(i).draw(g2, this);
-            }
+        }
+        g2.drawString(content, tank1.getX()-5, tank1.getY()-5);
+        g2.drawString(content1, tank2.getX()-5, tank2.getY()-5);
         //cut the iamge into left and right
         leftImg = bimg.getSubimage(tank1.getX()-150, tank1.getY()-240, 316, 480);
         rightImg = bimg.getSubimage(tank2.getX()-150, tank2.getY()-240, 316, 480);

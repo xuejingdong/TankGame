@@ -19,7 +19,7 @@ public class TankCollisionDetector{
         this.gameEvent1 = ge1;
         this.gameEvent2 = ge2;
     }
-   
+   /*
     public void TankVSTank(Tank tank1, Tank tank2){
         Rectangle tank1Box = new Rectangle(tank1.getX(), tank1.getY(), tank1.getWidth(), tank1.getHeight());
         Rectangle tank2Box = new Rectangle(tank2.getX(), tank2.getY(), tank2.getWidth(), tank2.getHeight());
@@ -28,7 +28,7 @@ public class TankCollisionDetector{
             this.gameEvent2.setValue("Tank Collision");
             //System.out.println("tank1 and tank2 collision");
         }
-    }
+    }*/
     public void TankBulletVSWall(Tank tank1, Tank tank2){
         TankBullet bullet;
         Wall wall;
@@ -77,7 +77,10 @@ public class TankCollisionDetector{
             Rectangle bullet2Box= new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
             if(tank1Box.intersects(bullet2Box) && !tank1.getBoom()){
                 //System.out.println("tank1 and tank2 bullet Collision");
-                this.gameEvent1.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
+                if(!tank1.isInShield()){//send collision msg only when tank1 is not in shield
+                    this.gameEvent1.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
+                    tank2.addScore(bullet.getDamge());
+                }
                 tank2Bullet.remove(i);//remove this bullet from the list
             }
         }
@@ -87,9 +90,32 @@ public class TankCollisionDetector{
             Rectangle bullet1Box= new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
             if(tank2Box.intersects(bullet1Box) && !tank2.getBoom()){
                 //System.out.println("tank2 and tank1 bullet Collision");
-                this.gameEvent2.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
+                if(!tank2.isInShield()){//send collision msg only when tank2 is not in shield
+                    this.gameEvent2.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
+                    tank1.addScore(bullet.getDamge());
+                }
                 tank1Bullet.remove(i);//remove this bullet from the list
             }
         }
+    }
+    
+    public void TankVSPowerUp(Tank tank1, Tank tank2){
+        TankGamePowerUp power;
+        Rectangle tank1Box = new Rectangle(tank1.getX(), tank1.getY(), tank1.getWidth(), tank1.getHeight());
+        Rectangle tank2Box = new Rectangle(tank2.getX(), tank2.getY(), tank2.getWidth(), tank2.getHeight());
+        //check collosion between power up and tank1
+        for(int i = 0; i < TankGame.powerup.size(); i++){
+            power = TankGame.powerup.get(i);
+            Rectangle powerBox = new Rectangle(power.getX(),power.getY(),power.getWidth(),power.getHeight());
+            if(powerBox.intersects(tank1Box) && !tank1.getBoom() && power.getShow()){
+                power.setCollected(true);
+                this.gameEvent1.setValue("PowerUp"+" " + power.getType());
+            }
+            if(powerBox.intersects(tank2Box) && !tank2.getBoom() && power.getShow()){
+                power.setCollected(true);
+                this.gameEvent2.setValue("PowerUp"+" " + power.getType());
+            }
+        }
+        
     }
 }
