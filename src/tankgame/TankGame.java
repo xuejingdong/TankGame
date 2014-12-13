@@ -54,8 +54,8 @@ public class TankGame extends JApplet implements Runnable {
             System.out.println("No resource are found in init()");
         }
 
-        tank1 = new Tank(tankBlue, 1, 230, 608, 6, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
-        tank2 = new Tank(tankRed,1,864,608,6,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+        tank1 = new Tank(tankBlue, 1, 280, 738, 6, KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+        tank2 = new Tank(tankRed,1,878,738,6,KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
         gameEvent1 = new GameEvents();
         gameEvent2 = new GameEvents();
         gameEvent1.addObserver(tank1);
@@ -198,7 +198,7 @@ public class TankGame extends JApplet implements Runnable {
          }
          else{
         //updating the gameObjects by first checking the collisions
-        //CD.TankVSTank(tank1, tank2);
+        CD.TankVSTank(tank1, tank2);
         CD.TankBulletVSWall(tank1, tank2);
         CD.TankVSTankBullet(tank1, tank2);
         CD.TankVSPowerUp(tank1, tank2);

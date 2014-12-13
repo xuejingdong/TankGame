@@ -19,16 +19,16 @@ public class TankCollisionDetector{
         this.gameEvent1 = ge1;
         this.gameEvent2 = ge2;
     }
-   /*
+   
     public void TankVSTank(Tank tank1, Tank tank2){
         Rectangle tank1Box = new Rectangle(tank1.getX(), tank1.getY(), tank1.getWidth(), tank1.getHeight());
         Rectangle tank2Box = new Rectangle(tank2.getX(), tank2.getY(), tank2.getWidth(), tank2.getHeight());
         if(tank1Box.intersects(tank2Box)){
-            this.gameEvent1.setValue("Tank Collision");
-            this.gameEvent2.setValue("Tank Collision");
-            //System.out.println("tank1 and tank2 collision");
+            this.gameEvent1.setValue("Collision" + " "+ 50);
+            this.gameEvent2.setValue("Collision" + " "+ 50);
+            System.out.println("tank1 and tank2 collision");
         }
-    }*/
+    }
     public void TankBulletVSWall(Tank tank1, Tank tank2){
         TankBullet bullet;
         Wall wall;
