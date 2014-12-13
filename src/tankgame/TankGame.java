@@ -69,7 +69,7 @@ public class TankGame extends JApplet implements Runnable {
         explosion = new ArrayList<TankGameExplosion>(200);
         powerup = new ArrayList<TankGamePowerUp>(10);
         map = readMap("map.csv", 37, 38,wall_list,powerup);
-        //sp = new SoundPlayer(1,"TankResources/background.wav");
+        sp = new SoundPlayer(1,"TankResources/background.wav");
         
     }
 
@@ -182,6 +182,21 @@ public class TankGame extends JApplet implements Runnable {
         Font stringFont = new Font( "SansSerif", Font.PLAIN, 18 ); 
         g2.setFont(stringFont); 
         g2.setColor(Color.white);
+        
+        if(tank1.getBoom()){
+            stringFont = new Font( "SansSerif", Font.BOLD, 40); 
+            gDisplay.setFont( stringFont ); 
+            gDisplay.setColor(Color.white);
+            gDisplay.drawString(" PLAYER2 WON! ", 170, 220);
+            sp.stop();;
+         }else if(tank2.getBoom()){
+            stringFont = new Font( "SansSerif", Font.BOLD, 40 ); 
+            gDisplay.setFont( stringFont );
+            gDisplay.setColor(Color.white);
+            gDisplay.drawString("PALYER1 WON!", 170, 220);
+            sp.stop();
+         }
+         else{
         //updating the gameObjects by first checking the collisions
         //CD.TankVSTank(tank1, tank2);
         CD.TankBulletVSWall(tank1, tank2);
@@ -233,7 +248,7 @@ public class TankGame extends JApplet implements Runnable {
         gDisplay.drawImage(leftImg, 0, 0, this);
         gDisplay.drawImage(rightImg,317,0,this);
         gDisplay.drawImage(miniMap, 260,300,this);
-        
+       }  
     }
 
     public void start() {
