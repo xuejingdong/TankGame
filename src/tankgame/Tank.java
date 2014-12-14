@@ -165,17 +165,11 @@ public class Tank extends GameObject implements Observer {
         if(!this.boom){
             TankBullet playerb;
             int xP, yP;
-            xP = (int) (Math.cos(Math.toRadians(currentSub * 6)))+ this.x;
-            yP = (int) (-Math.sin(Math.toRadians(currentSub * 6))+ this.y);
-            if(true){
-                playerb = new TankBullet(currentBulletStrip, xP, yP, bulletDamage, 
+            xP = (int) ( Math.cos(Math.toRadians(currentSub * 6)) * 10 + this.x + this.width/2/* - Math.max(0.3 * currentSub * currentSub - 90,0) * 0.3*/);
+            yP = (int) ( -Math.sin(Math.toRadians(currentSub * 6)) * 10 + this.y + 40/2/* - Math.max(0.3 * currentSub * currentSub - 300,0) * 0.3*/);
+            playerb = new TankBullet(currentBulletStrip, xP, yP, bulletDamage, 
                     (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
-            }/*
-            else{
-                playerb = new TankBullet(currentBulletStrip, x + width / 3, y+40, bulletDamage, 
-                    (int) (Math.cos(Math.toRadians(currentSub * 6)) * 20 ), (int) (-Math.sin(Math.toRadians(currentSub * 6)) * 20),this.currentSub);
-            } */
-             myBulletList.add(playerb);
+            myBulletList.add(playerb);
         }
         if(this.useStrongBullet && this.strongBulletCount >0){
             this.strongBulletCount--;

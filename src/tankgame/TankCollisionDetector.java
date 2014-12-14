@@ -26,7 +26,7 @@ public class TankCollisionDetector{
         if(tank1Box.intersects(tank2Box)){
             this.gameEvent1.setValue("Collision" + " "+ 50);
             this.gameEvent2.setValue("Collision" + " "+ 50);
-            System.out.println("tank1 and tank2 collision");
+            //System.out.println("tank1 and tank2 collision");
         }
     }
     public void TankBulletVSWall(Tank tank1, Tank tank2){
