@@ -8,7 +8,6 @@ package tankgame;
  *
  * @author Dong
  */
-import Airstrike.GameObject;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 import java.util.Random;

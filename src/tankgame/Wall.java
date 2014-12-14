@@ -8,7 +8,6 @@ package tankgame;
  *
  * @author Dong
  */
-import Airstrike.*;
 
 import java.awt.*;
 import java.awt.image.ImageObserver;

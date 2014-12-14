@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Airstrike;
+package tankgame;
 
 /**
  *
  * @author Dong
  */
+import tankgame.GameEvents;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 

@@ -2,14 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Airstrike;
+package tankgame;
 
 /**
  *
  * @author Dong
  */
 import tankgame.*;
-import Airstrike.*;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

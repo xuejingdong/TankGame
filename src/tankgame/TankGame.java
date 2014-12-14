@@ -1,6 +1,5 @@
 package tankgame;
 
-import Airstrike.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -41,9 +40,9 @@ public class TankGame extends JApplet implements Runnable {
     public void init() {
         setFocusable(true);
         try {
-            background = ImageIO.read(TankGame.class.getResource("TankResources/background.png"));
-            wall1 = ImageIO.read(TankGame.class.getResource("TankResources/wall1.png"));
-            wall2 = ImageIO.read(TankGame.class.getResource("TankResources/wall2.png"));
+            background = ImageIO.read(TankGame.class.getResource("TankResources/Background.png"));
+            wall1 = ImageIO.read(TankGame.class.getResource("TankResources/Wall1.png"));
+            wall2 = ImageIO.read(TankGame.class.getResource("TankResources/Wall2.png"));
             tankBlue = ImageIO.read(TankGame.class.getResource("TankResources/Tank1_strip60.png"));
             tankRed = ImageIO.read(TankGame.class.getResource("TankResources/Tank2_strip60.png"));
             bigExp = ImageIO.read(TankGame.class.getResource("TankResources/Explosion_large_strip7.png"));

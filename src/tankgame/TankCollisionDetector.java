@@ -8,7 +8,6 @@ package tankgame;
  *
  * @author Dong
  */
-import Airstrike.*;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
