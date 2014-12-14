@@ -23,6 +23,7 @@ public class TankGamePowerUp extends GameObject{
     
     public TankGamePowerUp(Image img,int x, int y, int speed, int PowerType){
         super(img, x, y, speed);
+        this.width = this.height;
         this.type = PowerType;
         this.appearDuration = 100*type;
         this.disappearDuration = 100*type;

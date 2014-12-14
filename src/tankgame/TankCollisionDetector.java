@@ -44,7 +44,7 @@ public class TankCollisionDetector{
                     tank1Bullet.remove(bullet);//remove bullet from list 
                     if(wall.getShootable())
                         wall.setBeShoot(true);
-                    //System.out.println("tank1 bullet & wall collision hanppens");
+                    //System.out.println("tank1 bullet & wall collision hanppens" + bullet.getWidth());
                 }
             }
         }
@@ -88,7 +88,6 @@ public class TankCollisionDetector{
             bullet = tank1Bullet.get(i);
             Rectangle bullet1Box= new Rectangle(bullet.getX(),bullet.getY(),bullet.getWidth(),bullet.getHeight());
             if(tank2Box.intersects(bullet1Box) && !tank2.getBoom()){
-                //System.out.println("tank2 and tank1 bullet Collision");
                 if(!tank2.isInShield()){//send collision msg only when tank2 is not in shield
                     this.gameEvent2.setValue("Collision"+ " "+ bullet.getDamge());//update the overable
                     tank1.addScore(bullet.getDamge());

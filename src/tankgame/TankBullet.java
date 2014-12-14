@@ -18,6 +18,7 @@ public class TankBullet extends Bullet {
     
     TankBullet(Image img, int x, int y, int damage, int Xspeed,int Yspeed, int currentSub){
         super(img,x,y,damage,Xspeed,Yspeed);
+        this.width = this.height;
         this.currentSub = currentSub;
         this.Xspeed = Xspeed;
     }
