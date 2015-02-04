@@ -113,7 +113,7 @@ public class TankGame extends JApplet implements Runnable {
         int map[][] = new int[height][width];
        
         try {
-            fileScanner = new Scanner(new FileInputStream(fileName));
+            fileScanner = new Scanner(TankGame.class.getResourceAsStream(fileName));
             fileScanner.useDelimiter(",|\\n|\\r");
             for (int i = 0; i < height; i++) {
                 for (int j = 0; j < width; j++) {
@@ -153,7 +153,7 @@ public class TankGame extends JApplet implements Runnable {
              }
              System.out.println();
              }*/
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
