@@ -1,4 +1,4 @@
-# TankGame
+TankGame
 =========
 ![ScreenShot](tank1.jpg)
 ![ScreenShot](tank2.jpg)
